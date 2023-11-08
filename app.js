@@ -43,4 +43,42 @@ window.addEventListener("DOMContentLoaded", () => {
       });
     }
   });
+    
+
+    // Timer
+
+    const deadline = '2024-08-11'
+    
+    function getTimeRemaining(endtime) { 
+        const timer = Date.parse(endtime) - Date.parse(new Date()),
+        days = Math.floor(timer / (1000 * 60 * 60 * 24)),
+        hours = Math.floor((timer / (1000 * 60 * 60)) % 24),
+        minutes = Math.floor((timer / 1000 / 60) % 60),
+        seconds = Math.floor((timer / 1000) % 60)
+
+        return { timer, days, hours, minutes, seconds}
+    }
+
+    function setClock(selector, endtime) {
+        const timer = document.querySelector(selector),
+            days = document.querySelector('#days'),
+            hours = document.querySelector('#hours'),
+            minutes = document.querySelector('#minutes'),
+            seconds = document.querySelector('#seconds'),
+            timeInterval = setInterval(updateClock, 1000)
+        
+        function updateClock() {
+            const t = getTimeRemaining(endtime)
+
+            days.innerHTML = t.days
+            hours.innerHTML = t.hours
+            minutes.innerHTML = t.minutes
+            seconds.innerHTML = t.seconds
+
+            if (t.timer <= 0) {
+                clearInterval(timeInterval)
+            }
+        }
+    }
+    setClock(".timer", deadline)
 });
