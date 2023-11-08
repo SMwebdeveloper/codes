@@ -57,10 +57,10 @@ window.addEventListener("DOMContentLoaded", () => {
       minutes = 0;
       seconds = 0;
     } else {
-      days = Math.floor(timer / (1000 * 60 * 60 * 24)),
-      hours = Math.floor((timer / (1000 * 60 * 60)) % 24),
-      minutes = Math.floor((timer / 1000 / 60) % 60),
-      seconds = Math.floor((timer / 1000) % 60)
+      (days = Math.floor(timer / (1000 * 60 * 60 * 24))),
+        (hours = Math.floor((timer / (1000 * 60 * 60)) % 24)),
+        (minutes = Math.floor((timer / 1000 / 60) % 60)),
+        (seconds = Math.floor((timer / 1000) % 60));
     }
 
     return { timer, days, hours, minutes, seconds };
@@ -89,54 +89,120 @@ window.addEventListener("DOMContentLoaded", () => {
   }
   setClock(".timer", deadline);
 
-    //   Modal
-    
-    const modalTrigger = document.querySelectorAll('[data-modal]'),
-    modal = document.querySelector('.modal'),
-    modalCloseBtn = document.querySelector('[data-close]')
+  //   Modal
+
+  const modalTrigger = document.querySelectorAll("[data-modal]"),
+    modal = document.querySelector(".modal"),
+    modalCloseBtn = document.querySelector("[data-close]");
 
   function closeModal() {
-    modal.classList.add('hide')
-    modal.classList.remove('show')
-    document.body.style.overflow = ''
+    modal.classList.add("hide");
+    modal.classList.remove("show");
+    document.body.style.overflow = "";
   }
 
   function openModal() {
-    modal.classList.add('show')
-    modal.classList.remove('hide')
-    document.body.style.overflow = 'hidden'
-   }
+    modal.classList.add("show");
+    modal.classList.remove("hide");
+    document.body.style.overflow = "hidden";
+  }
 
   modalTrigger.forEach((item) => {
-    item.addEventListener('click', openModal)
-  })
+    item.addEventListener("click", openModal);
+  });
 
-  modalCloseBtn.addEventListener('click', closeModal)
+  modalCloseBtn.addEventListener("click", closeModal);
 
-  modal.addEventListener('click', (e) => {
+  modal.addEventListener("click", (e) => {
     if (e.target == modal) {
-      closeModal()
+      closeModal();
     }
-  })
+  });
 
-  document.addEventListener('keydown', (e) => {
-    if (e.code === 'Escape' && modal.classList.contains('show')) {
-      closeModal()
+  document.addEventListener("keydown", (e) => {
+    if (e.code === "Escape" && modal.classList.contains("show")) {
+      closeModal();
     }
-  })
+  });
 
   // const modalTimerId = setTimeout(openModal, 5000)
 
   function showModalByScroll() {
     if (
       window.pageYOffset + document.documentElement.clientHeight >=
-      document.documentElement.scrollHeight -1
+      document.documentElement.scrollHeight - 1
     ) {
-      openModal()
-      window.removeEventListener('scroll', showModalByScroll)
+      openModal();
+      window.removeEventListener("scroll", showModalByScroll);
     }
-      console.log(window.pageYOffset)
+    console.log(window.pageYOffset);
   }
 
-  window.addEventListener('scroll', showModalByScroll)
+  window.addEventListener("scroll", showModalByScroll);
+
+  //   Class
+
+  class MenuCard {
+    constructor(src, alt, title, descr, price, parentSelector) {
+      this.src = src;
+      this.alt = alt;
+      this.title = title;
+      this.descr = descr;
+      this.price = price;
+      this.parent = document.querySelector(parentSelector);
+      this.transfer = 11000;
+      this.changeToUZS();
+    }
+
+    changeToUZS() {
+      this.price = this.price * this.transfer;
+    }
+
+    render() {
+      const element = document.createElement("div");
+      element.innerHTML = ` 
+          <div class="menu__item">
+             <img src=${this.src} alt=${this.alt} />
+             <h3 class="menu__item-subtitle">${this.title}</h3>
+             <div class="menu__item-descr">
+               ${this.descr}
+             </div>
+             <div class="menu__item-divider"></div>
+             <div class="menu__item-price">
+               <div class="menu__item-cost">Price:</div>
+               <div class="menu__item-total"><span>${this.price}</span> month</div>
+             </div>
+          </div>
+        `;
+      this.parent.append(element);
+    }
+  }
+
+  new MenuCard(
+    "img/tabs/1.png",
+    "usual",
+    'Plan "Usual"',
+    "Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque aliquid molestiae, sit eveniet, tempora ipsum quaerat recusandae sapiente doloremque corporis dolores quas consectetur ut labore distinctio libero reiciendis harum sequi?",
+    10,
+    ".menu .container"
+  ).render();
+  new MenuCard(
+    "img/tabs/2.jpg",
+    "plan",
+    "Plan “Premium”",
+    "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fugit nesciunt facere, sequi exercitationem praesentium ab cupiditatebeatae debitis perspiciatis itaque quaerat id modi corporis delectus ratione nobis harum voluptatum in.",
+    20,
+    ".menu .container",
+    "menu__item"
+  ).render();
+
+  new MenuCard(
+    "img/tabs/3.jpg",
+    "vip",
+    "Plan VIP",
+    "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fugit nesciunt facere, sequi exercitationem praesentium ab cupiditatebeatae debitis perspiciatis itaque quaerat id modi corporis delectus ratione nobis harum voluptatum in.",
+    30,
+    ".menu .container",
+    "menu__item"
+  ).render();
 });
