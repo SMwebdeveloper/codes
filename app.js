@@ -143,12 +143,13 @@ window.addEventListener("DOMContentLoaded", () => {
   //   Class
 
   class MenuCard {
-    constructor(src, alt, title, descr, price, parentSelector) {
+    constructor(src, alt, title, descr, price, parentSelector, ...classes) {
       this.src = src;
       this.alt = alt;
       this.title = title;
       this.descr = descr;
       this.price = price;
+      this.classes = classes;
       this.parent = document.querySelector(parentSelector);
       this.transfer = 11000;
       this.changeToUZS();
@@ -160,8 +161,9 @@ window.addEventListener("DOMContentLoaded", () => {
 
     render() {
       const element = document.createElement("div");
+      this.classes.forEach((className) => element.classList.add(className));
       element.innerHTML = ` 
-          <div class="menu__item">
+          
              <img src=${this.src} alt=${this.alt} />
              <h3 class="menu__item-subtitle">${this.title}</h3>
              <div class="menu__item-descr">
@@ -172,7 +174,7 @@ window.addEventListener("DOMContentLoaded", () => {
                <div class="menu__item-cost">Price:</div>
                <div class="menu__item-total"><span>${this.price}</span> month</div>
              </div>
-          </div>
+        
         `;
       this.parent.append(element);
     }
@@ -184,7 +186,8 @@ window.addEventListener("DOMContentLoaded", () => {
     'Plan "Usual"',
     "Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque aliquid molestiae, sit eveniet, tempora ipsum quaerat recusandae sapiente doloremque corporis dolores quas consectetur ut labore distinctio libero reiciendis harum sequi?",
     10,
-    ".menu .container"
+      ".menu .container",
+    "menu__item"
   ).render();
   new MenuCard(
     "img/tabs/2.jpg",
