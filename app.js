@@ -135,7 +135,6 @@ window.addEventListener("DOMContentLoaded", () => {
       openModal();
       window.removeEventListener("scroll", showModalByScroll);
     }
-    console.log(window.pageYOffset);
   }
 
   window.addEventListener("scroll", showModalByScroll);
@@ -186,7 +185,7 @@ window.addEventListener("DOMContentLoaded", () => {
     'Plan "Usual"',
     "Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque aliquid molestiae, sit eveniet, tempora ipsum quaerat recusandae sapiente doloremque corporis dolores quas consectetur ut labore distinctio libero reiciendis harum sequi?",
     10,
-      ".menu .container",
+    ".menu .container",
     "menu__item"
   ).render();
   new MenuCard(
@@ -211,43 +210,96 @@ window.addEventListener("DOMContentLoaded", () => {
 
   // slider
 
-  const sliders = document.querySelectorAll('.offer__slide'),
-    current = document.querySelector('#current'),
-    total = document.querySelector('#total'),
-    next = document.querySelector('.offer__slider-next'),
-    prev = document.querySelector('.offer__slider-prev')
-  
-  let slideIndex = 1
+  const sliders = document.querySelectorAll(".offer__slide"),
+    current = document.querySelector("#current"),
+    total = document.querySelector("#total"),
+    next = document.querySelector(".offer__slider-next"),
+    prev = document.querySelector(".offer__slider-prev"),
+    sliderWrapper = document.querySelector(".offer__slider-wrapper"),
+    sliderInner = document.querySelector(".offer__slider-inner"),
+    width = window.getComputedStyle(sliderWrapper).width;
 
-  slideShow(slideIndex)
-  
+  let slideIndex = 1;
+  let offset = 0;
+
   if (sliders.length < 10) {
-    total.textContent = `0${sliders.length}`
+    total.textContent = `0${sliders.length}`;
+    current.textContent = `0${slideIndex}`;
   } else {
-    total.textContent = sliders.length
+    total.textContent = sliders.length;
+    current.textContent = slideIndex;
   }
 
-  function slideShow(idx) { 
-    if (idx > sliders.length) {
-      slideIndex = 1
-    }
-    if (idx < 1) {
-      slideIndex = sliders.length
-    }
-    sliders.forEach((item) =>  item.style.display = 'none')
-    sliders[slideIndex - 1].style.display = 'block'
+  sliderInner.style.width = 100 * sliders.length + "%";
+  sliderInner.style.display = "flex";
+  sliderInner.style.transition = "0.5s ease";
+  sliderWrapper.style.overflow = "hidden";
 
-    if (sliders.length < 10) {
-      current.textContent = `0${slideIndex}`
+  sliders.forEach((item) => {
+    item.style.width = width;
+  });
+
+  next.addEventListener("click", () => {
+    if (offset == +width.slice(0, width.length - 2) * (sliders.length - 1)) {
+      offset = 0;
     } else {
-      current.textContent = slideIndex
+      offset += +width.slice(0, width.length - 2);
     }
-  }
+    sliderInner.style.transform = `translateX(-${offset}px)`;
+    if (slideIndex == sliders.length) {
+      slideIndex = 1;
+    } else {
+      slideIndex++;
+    }
+    if (sliders.length > 10) {
+      current.textContent = `0${slideIndex}`;
+    } else {
+      current.textContent = slideIndex;
+    }
+  });
 
-  function plusSlide(idx) {
-    slideShow(slideIndex += idx)
-  }
+  prev.addEventListener("click", () => {
+    if (offset == 0) {
+      offset = +width.slice(0, width.length - 2) * (sliders.length - 1);
+    } else {
+      offset -= +width.slice(0, width.length - 2);
+    }
+    sliderInner.style.transform = `translateX(-${offset}px)`;
+    if (slideIndex == 1) {
+      slideIndex = sliders.length;
+    } else {
+      slideIndex--;
+    }
+    if (sliders.length > 10) {
+      current.textContent = `0${slideIndex}`;
+    } else {
+      current.textContent = slideIndex;
+    }
+  });
 
-  next.addEventListener('click', () => plusSlide(1))
-  prev.addEventListener('click', () => plusSlide(-1))
+  // slideShow(slideIndex)
+
+  // function slideShow(idx) {
+  //   if (idx > sliders.length) {
+  //     slideIndex = 1
+  //   }
+  //   if (idx < 1) {
+  //     slideIndex = sliders.length
+  //   }
+  //   sliders.forEach((item) =>  item.style.display = 'none')
+  //   sliders[slideIndex - 1].style.display = 'block'
+
+  //   if (sliders.length < 10) {
+  //     current.textContent = `0${slideIndex}`
+  //   } else {
+  //     current.textContent = slideIndex
+  //   }
+  // }
+
+  // function plusSlide(idx) {
+  //   slideShow(slideIndex += idx)
+  // }
+
+  // next.addEventListener('click', () => plusSlide(1))
+  // prev.addEventListener('click', () => plusSlide(-1))
 });
