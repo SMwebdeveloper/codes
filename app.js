@@ -208,4 +208,46 @@ window.addEventListener("DOMContentLoaded", () => {
     ".menu .container",
     "menu__item"
   ).render();
+
+  // slider
+
+  const sliders = document.querySelectorAll('.offer__slide'),
+    current = document.querySelector('#current'),
+    total = document.querySelector('#total'),
+    next = document.querySelector('.offer__slider-next'),
+    prev = document.querySelector('.offer__slider-prev')
+  
+  let slideIndex = 1
+
+  slideShow(slideIndex)
+  
+  if (sliders.length < 10) {
+    total.textContent = `0${sliders.length}`
+  } else {
+    total.textContent = sliders.length
+  }
+
+  function slideShow(idx) { 
+    if (idx > sliders.length) {
+      slideIndex = 1
+    }
+    if (idx < 1) {
+      slideIndex = sliders.length
+    }
+    sliders.forEach((item) =>  item.style.display = 'none')
+    sliders[slideIndex - 1].style.display = 'block'
+
+    if (sliders.length < 10) {
+      current.textContent = `0${slideIndex}`
+    } else {
+      current.textContent = slideIndex
+    }
+  }
+
+  function plusSlide(idx) {
+    slideShow(slideIndex += idx)
+  }
+
+  next.addEventListener('click', () => plusSlide(1))
+  prev.addEventListener('click', () => plusSlide(-1))
 });
